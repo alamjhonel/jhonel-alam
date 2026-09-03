@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { useTheme } from './context/ThemeContext.jsx'
 import NetworkBackground from './components/background/NetworkBackground.jsx'
 import BootSequence from './components/boot/BootSequence.jsx'
@@ -63,6 +64,7 @@ export default function App() {
       />
       <TerminalWidget open={terminalOpen} onOpenChange={setTerminalOpen} />
       <KonamiEasterEgg />
+      <Analytics />
     </>
   )
 }
