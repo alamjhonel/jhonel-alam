@@ -154,14 +154,20 @@ export default function CertViewer({ src, title, onClose }) {
           {blobUrl ? (
             <iframe
               key={blobUrl}
-              src={`${blobUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&statusbar=0&messages=0&print=0`}
+              // Bare URL — no fragment params. Chrome occasionally refuses
+              // to render a PDF inside an iframe when fragment params are
+              // present. The viewer's own toolbar is suppressed via CSS
+              // (the dark frame above) and the parent page's no-download
+              // policies.
+              src={blobUrl}
               title={title}
-              className="h-full min-h-[60vh] w-full select-none"
+              className="h-full min-h-[60vh] w-full select-none border-0"
               // allow-same-origin is required for the browser's built-in PDF
               // viewer to load. The blob URL is a unique opaque origin, so
               // this grants no access to the parent document. We still
               // disable scripts, popups, top-nav, and forms.
               sandbox="allow-same-origin"
+              referrerPolicy="no-referrer"
               onContextMenu={blockEvent}
             />
           ) : (

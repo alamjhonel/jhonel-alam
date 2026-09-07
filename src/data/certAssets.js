@@ -15,4 +15,5 @@ export const CERT_PDF = {
   'google-cybersecurity': '__GOOGLE_CYBERSECURITY_PDF__',
   'google-network-security': '__GOOGLE_NETWORK_SECURITY_PDF__',
   'intro-to-cybersecurity': '__INTRO_TO_CYBERSECURITY_PDF__',
+  'sap-security': '__SAP_SECURITY_PDF__',
 }

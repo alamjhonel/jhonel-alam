@@ -30,6 +30,8 @@ const PDF_KEYS = {
     'src/assets/certs/google-network-security.pdf',
   '__INTRO_TO_CYBERSECURITY_PDF__':
     'src/assets/certs/IntrotoCybersec-NetAcad.pdf',
+  '__SAP_SECURITY_PDF__':
+    'src/assets/certs/SAP Security.pdf',
 }
 
 const VIRTUAL_PDF_PREFIX = 'cert-pdf:'
