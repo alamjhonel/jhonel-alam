@@ -240,14 +240,14 @@ function CertModal({ cert, onClose, copied, copy }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center bg-black/85 p-0 backdrop-blur-md sm:items-center sm:p-4"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 p-3 backdrop-blur-md sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-label={`${cert.name} credential`}
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)] sm:rounded-2xl"
+        className="relative flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
         onClick={(e) => e.stopPropagation()}
       >
           {/* Close — floating, always reachable, never overlaps title */}
