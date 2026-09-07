@@ -157,16 +157,12 @@ export default function CertViewer({ src, title, onClose }) {
               src={`${blobUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH&statusbar=0&messages=0&print=0`}
               title={title}
               className="h-full min-h-[60vh] w-full select-none"
-              // Hard sandbox: no scripts, no top-level navigation, no popups,
-              // no form submission, no same-origin (so the PDF can't read
-              // cookies or call back into the parent).
-              sandbox=""
+              // allow-same-origin is required for the browser's built-in PDF
+              // viewer to load. The blob URL is a unique opaque origin, so
+              // this grants no access to the parent document. We still
+              // disable scripts, popups, top-nav, and forms.
+              sandbox="allow-same-origin"
               onContextMenu={blockEvent}
-              onLoad={(e) => {
-                try {
-                  e.currentTarget.contentWindow?.print && undefined
-                } catch {}
-              }}
             />
           ) : (
             <div className="flex min-h-[60vh] items-center justify-center font-mono text-xs text-ink-faint">

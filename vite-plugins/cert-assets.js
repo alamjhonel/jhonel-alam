@@ -16,14 +16,20 @@ import { fileURLToPath } from 'node:url'
  *    never committed with megabytes of base64 data.
  */
 const PDF_KEYS = {
+  '__AWS_SYSOPS_PDF__':
+    'src/assets/certs/AWS Certified SysOps Administrator – Associate.pdf',
+  '__DATA_PROTECTION_GDPR_PDF__':
+    'src/assets/certs/Diploma in Data Protection and Security (GDPR).pdf',
   '__ETHICAL_HACKER_PDF__':
     'src/assets/certs/Ethical-Hacker-NetAcad.pdf',
-  '__INTRO_TO_CYBERSECURITY_PDF__':
-    'src/assets/certs/IntrotoCybersec-NetAcad.pdf',
+  '__GOOGLE_CLOUD_DIGITAL_LEADER_PDF__':
+    'src/assets/certs/Master Course in Google Cloud Digital Leader.pdf',
   '__GOOGLE_CYBERSECURITY_PDF__':
     'src/assets/certs/google-cybersecurity.pdf',
   '__GOOGLE_NETWORK_SECURITY_PDF__':
     'src/assets/certs/google-network-security.pdf',
+  '__INTRO_TO_CYBERSECURITY_PDF__':
+    'src/assets/certs/IntrotoCybersec-NetAcad.pdf',
 }
 
 const VIRTUAL_PDF_PREFIX = 'cert-pdf:'

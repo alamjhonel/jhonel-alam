@@ -325,13 +325,13 @@ export const certifications = [
   { name: 'Google Cybersecurity Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', id: 'LOJWHMU5PI3X', category: 'Cybersecurity', pdf: 'google-cybersecurity' },
   { name: 'Google Network Security Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking', pdf: 'google-network-security' },
   { name: 'Google IT Support Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking' },
-  { name: 'AWS Certified SysOps Administrator – Associate', issuer: 'AWS', date: 'Nov 2023', category: 'Cloud' },
+  { name: 'AWS Certified SysOps Administrator – Associate', issuer: 'AWS', date: 'Nov 2023', category: 'Cloud', pdf: 'aws-sysops' },
   { name: 'Cryptography & Security: Protect Data from Cyber Threats', issuer: 'Certification', date: 'Dec 2025', category: 'Cybersecurity' },
   { name: 'Cryptography & Cybersecurity', issuer: 'Certification', date: 'Jan 2025', category: 'Cybersecurity' },
   { name: 'SAP Security: Deep Dive into Roles and Authorization', issuer: 'Certification', date: 'Jan 2025', category: 'Compliance' },
-  { name: 'Master Course in Google Cloud Digital Leader', issuer: 'Certification', category: 'Cloud' },
+  { name: 'Master Course in Google Cloud Digital Leader', issuer: 'Certification', category: 'Cloud', pdf: 'google-cloud-digital-leader' },
   { name: 'Critical Infrastructure Protection', issuer: 'OPSWAT', category: 'Compliance' },
-  { name: 'Data Protection & Security', issuer: 'Encryption · Access Control · GDPR · Risk Mgmt', category: 'Compliance' },
+  { name: 'Data Protection & Security', issuer: 'Encryption · Access Control · GDPR · Risk Mgmt', category: 'Compliance', pdf: 'data-protection-gdpr' },
   { name: 'National Certificate II – Computer System Servicing', issuer: 'TESDA', category: 'Networking' },
 ]
 

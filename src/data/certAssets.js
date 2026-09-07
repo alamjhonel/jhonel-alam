@@ -8,8 +8,11 @@
 // renders normally.
 
 export const CERT_PDF = {
+  'aws-sysops': '__AWS_SYSOPS_PDF__',
+  'data-protection-gdpr': '__DATA_PROTECTION_GDPR_PDF__',
   'ethical-hacker': '__ETHICAL_HACKER_PDF__',
-  'intro-to-cybersecurity': '__INTRO_TO_CYBERSECURITY_PDF__',
+  'google-cloud-digital-leader': '__GOOGLE_CLOUD_DIGITAL_LEADER_PDF__',
   'google-cybersecurity': '__GOOGLE_CYBERSECURITY_PDF__',
   'google-network-security': '__GOOGLE_NETWORK_SECURITY_PDF__',
+  'intro-to-cybersecurity': '__INTRO_TO_CYBERSECURITY_PDF__',
 }
