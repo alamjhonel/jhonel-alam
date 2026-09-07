@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { profile, skillGroups, experience } from '../../data/content.js'
-import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 import { useToast } from '../../context/ToastContext.jsx'
 import { scrollToSection } from '../../utils/scroll.js'
 import { IconTerminal, IconClose } from '../common/Icons.jsx'
@@ -22,7 +21,6 @@ const INTRO = [
  * from the site content — it is clearly a simulation, not a real shell.
  */
 export default function TerminalWidget({ open, onOpenChange }) {
-  const reduced = useReducedMotion()
   const { toast } = useToast()
   const [lines, setLines] = useState(INTRO)
   const [input, setInput] = useState('')
@@ -136,6 +134,28 @@ export default function TerminalWidget({ open, onOpenChange }) {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight })
   }, [lines, open])
 
+  // Lock body scroll while the terminal is open so the page underneath
+  // doesn't scroll when the user tries to scroll the terminal output.
+  useEffect(() => {
+    if (!open) return
+    const prevOverflow = document.body.style.overflow
+    const prevPosition = document.body.style.position
+    const prevTop = document.body.style.top
+    const prevWidth = document.body.style.width
+    const scrollY = window.scrollY
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.body.style.position = prevPosition
+      document.body.style.top = prevTop
+      document.body.style.width = prevWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
+
   // ESC closes the shell
   useEffect(() => {
     if (!open) return
@@ -185,10 +205,9 @@ export default function TerminalWidget({ open, onOpenChange }) {
         {open && (
           <motion.div
             className="fixed inset-x-4 bottom-20 z-[130] flex justify-end sm:inset-x-auto sm:right-5"
-            initial={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            initial={false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
             role="dialog"
             aria-label="Mock terminal (simulated)"
           >

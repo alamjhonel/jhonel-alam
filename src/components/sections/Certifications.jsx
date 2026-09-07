@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { certifications, certCategories } from '../../data/content.js'
 import SectionHeading from '../common/SectionHeading.jsx'
 import Reveal from '../common/Reveal.jsx'
-import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 import {
   IconShield,
   IconGlobe,
@@ -124,7 +123,6 @@ function useCopy(copyTimeoutMs = 1500) {
 export default function Certifications() {
   const [filter, setFilter] = useState('All')
   const [openCert, setOpenCert] = useState(null)
-  const reduced = useReducedMotion()
   const [copied, copy] = useCopy()
 
   const counts = useMemo(() => {
@@ -186,19 +184,14 @@ export default function Certifications() {
         </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout">
-            {shown.map((cert) => {
-              const Icon = CAT_ICONS[cert.category] ?? IconCap
-              return (
-                <motion.article
-                  key={cert.name}
-                  initial={reduced ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={reduced ? undefined : { opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={() => setOpenCert(cert)}
-                  className="group flex cursor-pointer flex-col rounded-xl border border-white/10 bg-base-800/50 p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
-                >
+          {shown.map((cert) => {
+            const Icon = CAT_ICONS[cert.category] ?? IconCap
+            return (
+              <article
+                key={cert.name}
+                onClick={() => setOpenCert(cert)}
+                className="group flex cursor-pointer flex-col rounded-xl border border-white/10 bg-base-800/50 p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
+              >
                   <div className="mb-3 flex items-center justify-between">
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-ink-soft transition-colors group-hover:border-accent/40 group-hover:text-accent">
                       <Icon size={18} />
@@ -217,10 +210,9 @@ export default function Certifications() {
                     </span>
                   </div>
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                </motion.article>
+                </article>
               )
             })}
-          </AnimatePresence>
         </div>
       </div>
 
@@ -263,10 +255,10 @@ function CertModal({ cert, onClose, copied, copy }) {
       >
         <motion.div
           className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
-          initial={{ opacity: 0, y: 8, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 8, scale: 0.98 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15, ease: 'easeOut' }}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative border-b border-white/10 p-5 sm:p-6">
