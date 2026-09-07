@@ -261,16 +261,8 @@ function CertModal({ cert, onClose, copied, copy }) {
           transition={{ duration: 0.15, ease: 'easeOut' }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="relative border-b border-white/10 p-5 sm:p-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-md border border-white/10 text-ink-faint transition-colors hover:border-accent/40 hover:text-accent"
-              aria-label="Close credential"
-            >
-              <IconClose size={16} />
-            </button>
-            <div className="flex items-start gap-4 pr-10">
+          <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-white/10 bg-base-900 p-4 pr-3 sm:p-6 sm:pr-4">
+            <div className="flex min-w-0 items-start gap-4">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent">
                 <Icon size={22} />
               </span>
@@ -284,6 +276,14 @@ function CertModal({ cert, onClose, copied, copy }) {
                 </p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close credential"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/15 text-ink-soft transition-colors hover:border-accent/40 hover:text-accent active:scale-95"
+            >
+              <IconClose size={18} />
+            </button>
           </div>
 
           <div className="flex-1 space-y-5 overflow-y-auto p-5 sm:p-6">

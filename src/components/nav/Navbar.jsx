@@ -37,6 +37,28 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open so the page underneath
+  // doesn't scroll while the user is reading the menu.
+  useEffect(() => {
+    if (!menuOpen) return
+    const prevOverflow = document.body.style.overflow
+    const prevPosition = document.body.style.position
+    const prevTop = document.body.style.top
+    const prevWidth = document.body.style.width
+    const scrollY = window.scrollY
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.body.style.position = prevPosition
+      document.body.style.top = prevTop
+      document.body.style.width = prevWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [menuOpen])
+
   function go(id) {
     setMenuOpen(false)
     scrollToSection(id)
@@ -46,7 +68,7 @@ export default function Navbar() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-[100] transition-colors duration-300 ${
-          scrolled ? 'border-b border-white/10 bg-base-900/80 backdrop-blur-md' : 'border-b border-transparent'
+          scrolled ? 'border-b border-white/10 bg-base-900 sm:bg-base-900/80 sm:backdrop-blur-md' : 'border-b border-transparent'
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between">
@@ -139,11 +161,10 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-x-0 top-16 z-[95] border-b border-white/10 bg-base-900/95 backdrop-blur-md lg:hidden"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-16 z-[95] border-b border-white/10 bg-base-900 lg:hidden"
+            initial={false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.12 }}
           >
             <ul className="container-page grid grid-cols-2 gap-2 py-4">
               {NAV_ITEMS.map((s) => (
@@ -151,7 +172,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => go(s.id)}
-                    className={`w-full rounded-md border border-white/[0.08] px-3 py-2.5 text-left font-mono text-sm transition-colors ${
+                    className={`flex min-h-11 w-full items-center rounded-md border border-white/[0.08] px-3 py-2.5 text-left font-mono text-sm transition-colors ${
                       activeId === s.id ? 'border-accent/40 text-accent' : 'text-ink-soft hover:text-ink'
                     }`}
                   >
