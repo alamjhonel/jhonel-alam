@@ -190,26 +190,27 @@ export default function Certifications() {
               <article
                 key={cert.name}
                 onClick={() => setOpenCert(cert)}
-                className="group flex cursor-pointer flex-col rounded-xl border border-white/10 bg-base-800/50 p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
+                className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-white/10 bg-base-800/50 p-4 transition-all duration-200 hover:-translate-y-1 hover:border-accent/40 hover:bg-base-800/80 hover:shadow-glow active:scale-[0.98]"
               >
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-ink-soft transition-colors group-hover:border-accent/40 group-hover:text-accent">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-ink-soft transition-all duration-200 group-hover:scale-110 group-hover:border-accent/40 group-hover:bg-accent/10 group-hover:text-accent">
                       <Icon size={18} />
                     </span>
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-ink-ghost">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-ink-ghost transition-colors group-hover:text-ink-faint">
                       {cert.category}
                     </span>
                   </div>
-                  <h3 className="text-sm font-semibold leading-snug text-ink">{cert.name}</h3>
-                  <p className="mt-1 font-mono text-xs text-accent">{cert.issuer}</p>
+                  <h3 className="break-words text-sm font-semibold leading-snug text-ink transition-colors group-hover:text-accent/90">{cert.name}</h3>
+                  <p className="mt-1 break-words font-mono text-xs text-accent/80">{cert.issuer}</p>
                   <div className="mt-auto flex items-center justify-between gap-2 pt-3 font-mono text-[11px] text-ink-faint">
                     <span>{cert.date ?? '—'}</span>
-                    <span className="inline-flex items-center gap-1 text-accent/70 opacity-0 transition-opacity group-hover:opacity-100">
-                      view dossier
-                      <IconArrowRight size={11} />
+                    <span className="inline-flex items-center gap-1 text-accent transition-all duration-200 group-hover:gap-1.5">
+                      <span className="hidden sm:inline opacity-0 transition-opacity group-hover:opacity-100">view dossier</span>
+                      <IconArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </div>
-                  <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-accent/[0.08] via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
                 </article>
               )
             })}
@@ -239,44 +240,49 @@ function CertModal({ cert, onClose, copied, copy }) {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 p-3 backdrop-blur-md sm:p-4"
+      className="fixed inset-0 z-[200] flex items-end justify-center bg-black/85 p-0 backdrop-blur-md sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-label={`${cert.name} credential`}
       onClick={onClose}
     >
       <div
-        className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-          <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-white/10 bg-base-900 p-4 pr-3 sm:p-6 sm:pr-4">
-            <div className="flex min-w-0 items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent">
+          {/* Close — floating, always reachable, never overlaps title */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close credential"
+            className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-base-900/90 text-ink-soft shadow-lg backdrop-blur-sm transition-all hover:border-accent/60 hover:text-accent hover:scale-105 active:scale-95 sm:right-4 sm:top-4"
+          >
+            <IconClose size={18} />
+          </button>
+
+          <div className="relative shrink-0 overflow-hidden border-b border-white/10 bg-gradient-to-br from-base-900 via-base-900 to-base-800 px-5 pb-5 pt-6 sm:px-7 sm:pt-7">
+            <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-accent/10 blur-3xl" aria-hidden />
+            <div className="relative flex items-start gap-4 pr-14">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent shadow-glow">
                 <Icon size={22} />
               </span>
-              <div className="min-w-0">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-accent">
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-accent">
                   {cert.category} · Credential
                 </p>
-                <h3 className="mt-1 text-lg font-semibold leading-snug text-ink">{cert.name}</h3>
-                <p className="mt-1 font-mono text-sm text-ink-soft">
+                <h3 className="mt-1.5 break-words text-base font-semibold leading-snug text-ink sm:text-lg">
+                  {cert.name}
+                </h3>
+                <p className="mt-1 break-words font-mono text-xs text-ink-soft sm:text-sm">
                   Issued by <span className="text-accent">{cert.issuer}</span>
                 </p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close credential"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/15 text-ink-soft transition-colors hover:border-accent/40 hover:text-accent active:scale-95"
-            >
-              <IconClose size={18} />
-            </button>
           </div>
 
-          <div className="flex-1 space-y-5 overflow-y-auto p-5 sm:p-6">
+          <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
             {/* Meta row */}
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
               <MetaCell label="Issue date" value={cert.date ?? 'On file'} />
               <MetaCell
                 label="Credential ID"
@@ -293,21 +299,27 @@ function CertModal({ cert, onClose, copied, copy }) {
               <div>
                 <div className="mb-2.5 flex items-center gap-1.5">
                   <IconSpark size={12} className="text-accent" />
-                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-ink-faint">
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-ink-faint">
                     Skills attested by credential
                   </p>
+                  <span className="ml-auto font-mono text-[10px] text-ink-ghost">
+                    {skills.length}
+                  </span>
                 </div>
-                <ul className="grid gap-2 sm:grid-cols-2">
-                  {skills.map((s) => (
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {skills.map((s, i) => (
                     <li
                       key={s}
-                      className="flex items-start gap-2 rounded-lg border border-white/[0.08] bg-base-900/50 p-2.5"
+                      className="group flex items-start gap-2.5 rounded-lg border border-white/[0.08] bg-base-800/40 p-2.5 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/[0.06]"
+                      style={{ animationDelay: `${i * 40}ms` }}
                     >
                       <IconCheckmark
                         size={13}
-                        className="mt-0.5 shrink-0 text-emerald-400/80"
+                        className="mt-0.5 shrink-0 text-emerald-400/80 transition-transform group-hover:scale-110"
                       />
-                      <p className="text-[12px] leading-relaxed text-ink-soft">{s}</p>
+                      <p className="break-words text-[12px] leading-relaxed text-ink-soft transition-colors group-hover:text-ink">
+                        {s}
+                      </p>
                     </li>
                   ))}
                 </ul>
