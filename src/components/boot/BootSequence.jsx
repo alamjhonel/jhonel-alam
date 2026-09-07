@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
+// Minimum time the boot overlay is visible. Below this it flashes by too
+// fast to read on mobile and looks like the animation never ran.
+const MIN_VISIBLE_MS = 1400
+
 const LINES = [
   { t: '> initializing secure session', d: 'boot' },
   { t: 'loading kernel modules ......... [ ok ]', d: 'ok' },
@@ -18,20 +22,30 @@ export default function BootSequence({ onComplete }) {
   const [visibleCount, setVisibleCount] = useState(0)
   const [done, setDone] = useState(false)
   const finished = useRef(false)
+  const startedAt = useRef(0)
 
   function finish() {
     if (finished.current) return
     finished.current = true
-    setDone(true)
-    // allow exit animation to play
-    window.setTimeout(() => onComplete?.(), reduced ? 0 : 450)
+    // Guarantee the overlay is on screen long enough to read, even if
+    // the user hits Esc/Enter immediately on a slow phone.
+    const elapsed = performance.now() - startedAt.current
+    const wait = Math.max(0, MIN_VISIBLE_MS - elapsed)
+    window.setTimeout(() => {
+      setDone(true)
+      // allow exit animation to play
+      window.setTimeout(() => onComplete?.(), reduced ? 0 : 450)
+    }, wait)
   }
 
   useEffect(() => {
+    startedAt.current = performance.now()
     if (reduced) {
-      // Skip the theatrics but still confirm access briefly.
+      // Reduced motion: show all lines immediately and hold the overlay
+      // long enough to be readable on small screens (otherwise it flashes
+      // by in 350ms and looks like nothing happened on mobile).
       setVisibleCount(LINES.length)
-      const id = window.setTimeout(finish, 350)
+      const id = window.setTimeout(finish, 1200)
       return () => window.clearTimeout(id)
     }
 

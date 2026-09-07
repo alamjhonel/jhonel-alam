@@ -175,7 +175,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
         onClick={() => onOpenChange?.(!open)}
         aria-label={open ? 'Close mock terminal' : 'Open mock terminal'}
         aria-expanded={open}
-        className="group fixed bottom-5 right-5 z-[115] inline-flex h-12 w-12 items-center justify-center rounded-full border border-accent/40 bg-base-800/90 text-accent shadow-panel backdrop-blur transition-colors hover:bg-accent/15 focus:outline-none"
+        className="group fixed bottom-5 right-5 z-[115] inline-flex h-12 w-12 items-center justify-center rounded-full border border-accent/40 bg-base-800 text-accent shadow-panel transition-colors hover:bg-accent/15 focus:outline-none sm:bg-base-800/90 sm:backdrop-blur"
       >
         <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-accent shadow-glow animate-pulse-node" aria-hidden="true" />
         <IconTerminal size={20} />
@@ -192,7 +192,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
             role="dialog"
             aria-label="Mock terminal (simulated)"
           >
-            <div className="panel w-full max-w-md overflow-hidden shadow-panel">
+            <div className="w-full max-w-md overflow-hidden rounded-xl border border-white/10 bg-base-800 shadow-panel sm:backdrop-blur-sm">
               {/* chrome */}
               <div className="flex items-center justify-between border-b border-white/10 bg-base-700/40 px-3.5 py-2.5">
                 <div className="flex items-center gap-2">

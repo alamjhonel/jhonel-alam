@@ -185,18 +185,17 @@ export default function Certifications() {
           })}
         </Reveal>
 
-        <motion.div layout={!reduced} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {shown.map((cert) => {
               const Icon = CAT_ICONS[cert.category] ?? IconCap
               return (
                 <motion.article
                   key={cert.name}
-                  layout={!reduced}
-                  initial={reduced ? false : { opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={reduced ? undefined : { opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  initial={reduced ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduced ? undefined : { opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => setOpenCert(cert)}
                   className="group flex cursor-pointer flex-col rounded-xl border border-white/10 bg-base-800/50 p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
                 >
@@ -222,7 +221,7 @@ export default function Certifications() {
               )
             })}
           </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
 
       <AnimatePresence>
