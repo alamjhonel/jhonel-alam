@@ -249,7 +249,7 @@ function CertModal({ cert, onClose, copied, copy }) {
   return (
     <>
       <motion.div
-        className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm"
+        className="fixed inset-0 z-[200] bg-black/85 backdrop-blur-md"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -259,15 +259,16 @@ function CertModal({ cert, onClose, copied, copy }) {
         role="dialog"
         aria-modal="true"
         aria-label={`${cert.name} credential`}
-        className="fixed inset-x-0 top-1/2 z-[201] mx-auto -translate-y-1/2 px-4 sm:px-6"
+        className="fixed inset-0 z-[201] flex items-center justify-center p-3 sm:p-4"
         initial={false}
       >
         <motion.div
-          className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-base-850 shadow-2xl"
+          className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
           initial={{ opacity: 0, y: 8, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 8, scale: 0.98 }}
           transition={{ duration: 0.22, ease: 'easeOut' }}
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="relative border-b border-white/10 p-5 sm:p-6">
             <button
@@ -294,7 +295,7 @@ function CertModal({ cert, onClose, copied, copy }) {
             </div>
           </div>
 
-          <div className="space-y-5 p-5 sm:p-6">
+          <div className="flex-1 space-y-5 overflow-y-auto p-5 sm:p-6">
             {/* Meta row */}
             <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
               <MetaCell label="Issue date" value={cert.date ?? 'On file'} />
@@ -313,7 +314,7 @@ function CertModal({ cert, onClose, copied, copy }) {
               <div>
                 <div className="mb-2.5 flex items-center gap-1.5">
                   <IconSpark size={12} className="text-accent" />
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-ink-ghost">
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-ink-faint">
                     Skills attested by credential
                   </p>
                 </div>
@@ -375,8 +376,8 @@ function CertModal({ cert, onClose, copied, copy }) {
 
 function MetaCell({ label, value, copyable, onCopy, copied }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-base-900/50 p-3">
-      <p className="font-mono text-[10px] uppercase tracking-wider text-ink-ghost">{label}</p>
+    <div className="rounded-lg border border-white/10 bg-base-700/40 p-3">
+      <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-ink-faint">{label}</p>
       {copyable ? (
         <button
           type="button"
@@ -387,7 +388,7 @@ function MetaCell({ label, value, copyable, onCopy, copied }) {
           {copied ? (
             <IconCheckmark size={12} className="shrink-0 text-emerald-400/80" />
           ) : (
-            <IconCopy size={12} className="shrink-0 text-ink-ghost" />
+            <IconCopy size={12} className="shrink-0 text-ink-faint" />
           )}
         </button>
       ) : (
