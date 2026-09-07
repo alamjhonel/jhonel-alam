@@ -99,9 +99,6 @@ body::before {
   .bg-grid {
     background-image: var(--tw-bg-grid, none);
   }
-  .no-motion-hidden {
-    @apply hidden;
-  }
 }
 
 /* Global reduced-motion damping for any CSS animations left running */

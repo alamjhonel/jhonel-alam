@@ -35,7 +35,6 @@ export default function DecryptText({ text, className = '', as: Tag = 'span', de
     io.observe(el)
 
     let raf = 0
-    let timeout = 0
 
     function run() {
       const start = performance.now() + delay
@@ -73,7 +72,6 @@ export default function DecryptText({ text, className = '', as: Tag = 'span', de
     return () => {
       io.disconnect()
       cancelAnimationFrame(raf)
-      clearTimeout(timeout)
     }
   }, [text, reduced, delay, duration])
 

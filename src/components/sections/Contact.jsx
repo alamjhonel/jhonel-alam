@@ -11,7 +11,6 @@ import {
   IconMail,
   IconPhone,
   IconSend,
-  IconShield,
   IconCheck,
   IconClose,
 } from '../common/Icons.jsx'
