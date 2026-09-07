@@ -33,15 +33,26 @@ export function ThemeProvider({ children }) {
     }
   }, [])
 
-  // Apply the accent to the CSS variable + persist
+  // Apply the accent to the CSS variable + persist. We briefly disable
+  // every CSS transition on <html> while the variable flips so the
+  // accent change is instant — otherwise every accent-colored element
+  // would transition one by one and the swap could take 1-2 seconds.
   useEffect(() => {
     const theme = THEMES[themeId] ?? THEMES.cyan
-    document.documentElement.style.setProperty('--accent', theme.accent)
+    const root = document.documentElement
+    root.classList.add('theme-swapping')
+    root.style.setProperty('--accent', theme.accent)
     try {
       localStorage.setItem(STORAGE_KEY, themeId)
     } catch {
       /* ignore */
     }
+    // Re-enable transitions on the next frame so the swap itself is
+    // instant but the next user interaction still animates normally.
+    const raf = requestAnimationFrame(() => {
+      root.classList.remove('theme-swapping')
+    })
+    return () => cancelAnimationFrame(raf)
   }, [themeId])
 
   const toggleTheme = useCallback(() => {

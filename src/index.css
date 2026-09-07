@@ -114,3 +114,13 @@ body::before {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* While the accent theme is being swapped, kill every transition so the
+   variable change is instant. The class is removed on the next frame. */
+.theme-swapping,
+.theme-swapping *,
+.theme-swapping *::before,
+.theme-swapping *::after {
+  transition: none !important;
+  animation: none !important;
+}

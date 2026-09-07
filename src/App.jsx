@@ -43,19 +43,24 @@ export default function App() {
 
       {!booted && <BootSequence onComplete={handleBootComplete} />}
 
-      <Navbar />
+      <div
+        className="transition-opacity duration-500"
+        style={{ opacity: booted ? 1 : 0 }}
+      >
+        <Navbar />
 
-      <main className="relative z-10">
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <FeaturedProject />
-        <Certifications />
-        <Activities />
-        <Education />
-        <Contact />
-      </main>
+        <main className="relative z-10">
+          <Hero />
+          <About />
+          <Skills />
+          <Experience />
+          <FeaturedProject />
+          <Certifications />
+          <Activities />
+          <Education />
+          <Contact />
+        </main>
+      </div>
 
       <CommandPalette
         onOpenTerminal={() => setTerminalOpen(true)}

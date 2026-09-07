@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { sections, profile } from '../../data/content.js'
 import { scrollToSection } from '../../utils/scroll.js'
@@ -38,7 +38,12 @@ export default function Navbar() {
   }, [])
 
   // Lock body scroll when mobile menu is open so the page underneath
-  // doesn't scroll while the user is reading the menu.
+  // doesn't scroll while the user is reading the menu. The cleanup
+  // restores the previous scroll position — but we skip the restore
+  // when the menu is closing because the user picked a section to
+  // navigate to (otherwise the restoration would cancel the smooth
+  // scroll mid-flight and the page would jump back to where it was).
+  const navTargetRef = useRef(null)
   useEffect(() => {
     if (!menuOpen) return
     const prevOverflow = document.body.style.overflow
@@ -55,13 +60,21 @@ export default function Navbar() {
       document.body.style.position = prevPosition
       document.body.style.top = prevTop
       document.body.style.width = prevWidth
-      window.scrollTo(0, scrollY)
+      if (!navTargetRef.current) {
+        window.scrollTo(0, scrollY)
+      }
     }
   }, [menuOpen])
 
   function go(id) {
+    navTargetRef.current = id
     setMenuOpen(false)
-    scrollToSection(id)
+    // Defer the scroll until after the menu's body-lock cleanup runs,
+    // otherwise the fixed-body position would offset the target.
+    window.setTimeout(() => {
+      scrollToSection(id)
+      navTargetRef.current = null
+    }, 0)
   }
 
   return (
