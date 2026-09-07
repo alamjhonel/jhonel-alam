@@ -55,7 +55,14 @@ export default function Navbar() {
 
   function go(id) {
     setMenuOpen(false)
-    scrollToSection(id)
+    // Defer the scroll to the next frame so React can commit the
+    // menu-close state change first. Calling scrollIntoView in the
+    // same tick as a state update can be cancelled on iOS Safari.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToSection(id)
+      })
+    })
   }
 
   return (

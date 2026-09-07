@@ -136,23 +136,15 @@ export default function TerminalWidget({ open, onOpenChange }) {
 
   // Lock body scroll while the terminal is open so the page underneath
   // doesn't scroll when the user tries to scroll the terminal output.
+  // We use overflow:hidden on <html> (not the position:fixed trick)
+  // so window.scrollY stays correct — the terminal's "hire-me" command
+  // scrolls to the contact section and needs the real scrollY.
   useEffect(() => {
     if (!open) return
-    const prevOverflow = document.body.style.overflow
-    const prevPosition = document.body.style.position
-    const prevTop = document.body.style.top
-    const prevWidth = document.body.style.width
-    const scrollY = window.scrollY
-    document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
+    const prev = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = prevOverflow
-      document.body.style.position = prevPosition
-      document.body.style.top = prevTop
-      document.body.style.width = prevWidth
-      window.scrollTo(0, scrollY)
+      document.documentElement.style.overflow = prev
     }
   }, [open])
 
