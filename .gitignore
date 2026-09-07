@@ -46,3 +46,8 @@ Thumbs.db
 .npm/
 .yarn/
 .pnpm-store/
+
+# Cert PDF originals — these get inlined as base64 data URIs at build
+# time and bundled into the JS. Keeping the source PDFs out of git
+# avoids leaking credentials in the public repo history.
+src/assets/certs/*.pdf

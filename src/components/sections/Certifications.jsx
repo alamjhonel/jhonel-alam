@@ -129,6 +129,13 @@ function useCopy(copyTimeoutMs = 1500) {
 // can request. The map is keyed by the `pdf` field on each certification.
 import { CERT_PDF } from '../../data/certAssets.js'
 
+// True only when a value is a fully-inlined data: URI. The build-time
+// placeholder strings (e.g. '__GOOGLE_CYBERSECURITY_PDF__') are kept
+// here when the PDF file is missing on disk; the viewer must skip them.
+function isInlinedPdf(value) {
+  return typeof value === 'string' && value.startsWith('data:application/pdf')
+}
+
 export default function Certifications() {
   const [filter, setFilter] = useState('All')
   const [openCert, setOpenCert] = useState(null)
@@ -241,7 +248,7 @@ export default function Certifications() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {viewerCert && CERT_PDF[viewerCert.pdf] && (
+        {viewerCert && isInlinedPdf(CERT_PDF[viewerCert.pdf]) && (
           <CertViewer
             key={viewerCert.name}
             src={CERT_PDF[viewerCert.pdf]}
@@ -350,7 +357,7 @@ function CertModal({ cert, onClose, copied, copy, onViewPdf }) {
 
             {/* Actions */}
             <div className="flex flex-col items-stretch gap-2.5 border-t border-white/10 pt-4 sm:flex-row sm:flex-wrap sm:items-center">
-              {cert.pdf && CERT_PDF[cert.pdf] && (
+              {cert.pdf && isInlinedPdf(CERT_PDF[cert.pdf]) && (
                 <button
                   type="button"
                   onClick={onViewPdf}

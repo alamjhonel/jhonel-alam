@@ -16,6 +16,10 @@ import { fileURLToPath } from 'node:url'
  *    never committed with megabytes of base64 data.
  */
 const PDF_KEYS = {
+  '__ETHICAL_HACKER_PDF__':
+    'src/assets/certs/Ethical-Hacker-NetAcad.pdf',
+  '__INTRO_TO_CYBERSECURITY_PDF__':
+    'src/assets/certs/IntrotoCybersec-NetAcad.pdf',
   '__GOOGLE_CYBERSECURITY_PDF__':
     'src/assets/certs/google-cybersecurity.pdf',
   '__GOOGLE_NETWORK_SECURITY_PDF__':
@@ -39,8 +43,10 @@ export function certAssets() {
       for (const relPath of Object.values(PDF_KEYS)) {
         try {
           readFileSync(resolve(root, relPath))
-        } catch (err) {
-          this.warn(`cert-assets: missing ${relPath}`)
+        } catch {
+          this.warn(
+            `cert-assets: ${relPath} not found — the matching cert will render without an inline PDF viewer until the file is added.`,
+          )
         }
       }
     },
@@ -65,11 +71,17 @@ export function certAssets() {
       if (id === '\0virtual:cert-assets-generated') {
         let source = readFileSync(placeholdersPath, 'utf8')
         for (const [placeholder, relPath] of Object.entries(PDF_KEYS)) {
-          const bytes = readFileSync(resolve(root, relPath))
-          const dataUri = `data:application/pdf;base64,${bytes.toString(
-            'base64',
-          )}`
-          source = source.replace(`'${placeholder}'`, `'${dataUri}'`)
+          try {
+            const bytes = readFileSync(resolve(root, relPath))
+            const dataUri = `data:application/pdf;base64,${bytes.toString(
+              'base64',
+            )}`
+            source = source.replace(`'${placeholder}'`, `'${dataUri}'`)
+          } catch {
+            // PDF not on disk yet — leave the placeholder string in place
+            // so the build still succeeds. The runtime viewer skips entries
+            // whose data: URI hasn't been inlined.
+          }
         }
         return source
       }

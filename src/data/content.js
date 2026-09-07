@@ -320,6 +320,8 @@ export const cmdb = {
 export const certCategories = ['All', 'Cybersecurity', 'Cloud', 'Networking', 'Compliance']
 
 export const certifications = [
+  { name: 'Ethical Hacker', issuer: 'NetAcad Program', date: 'New', category: 'Cybersecurity', pdf: 'ethical-hacker' },
+  { name: 'Introduction to Cybersecurity', issuer: 'Cisco', date: 'New', category: 'Cybersecurity', pdf: 'intro-to-cybersecurity' },
   { name: 'Google Cybersecurity Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', id: 'LOJWHMU5PI3X', category: 'Cybersecurity', pdf: 'google-cybersecurity' },
   { name: 'Google Network Security Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking', pdf: 'google-network-security' },
   { name: 'Google IT Support Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking' },
@@ -328,7 +330,6 @@ export const certifications = [
   { name: 'Cryptography & Cybersecurity', issuer: 'Certification', date: 'Jan 2025', category: 'Cybersecurity' },
   { name: 'SAP Security: Deep Dive into Roles and Authorization', issuer: 'Certification', date: 'Jan 2025', category: 'Compliance' },
   { name: 'Master Course in Google Cloud Digital Leader', issuer: 'Certification', category: 'Cloud' },
-  { name: 'Cybersecurity', issuer: 'CISCO', category: 'Cybersecurity' },
   { name: 'Critical Infrastructure Protection', issuer: 'OPSWAT', category: 'Compliance' },
   { name: 'Data Protection & Security', issuer: 'Encryption · Access Control · GDPR · Risk Mgmt', category: 'Compliance' },
   { name: 'National Certificate II – Computer System Servicing', issuer: 'TESDA', category: 'Networking' },
