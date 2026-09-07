@@ -238,29 +238,17 @@ function CertModal({ cert, onClose, copied, copy }) {
   const hasVerify = verifyLink !== '#'
 
   return (
-    <>
-      <motion.div
-        className="fixed inset-0 z-[200] bg-black/85 backdrop-blur-md"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      />
-      <motion.div
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${cert.name} credential`}
-        className="fixed inset-0 z-[201] flex items-center justify-center p-3 sm:p-4"
-        initial={false}
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 p-3 backdrop-blur-md sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${cert.name} credential`}
+      onClick={onClose}
+    >
+      <div
+        className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
+        onClick={(e) => e.stopPropagation()}
       >
-        <motion.div
-          className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-base-900 shadow-2xl sm:max-h-[calc(100vh-2rem)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
-          onClick={(e) => e.stopPropagation()}
-        >
           <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-white/10 bg-base-900 p-4 pr-3 sm:p-6 sm:pr-4">
             <div className="flex min-w-0 items-start gap-4">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent">
@@ -359,9 +347,8 @@ function CertModal({ cert, onClose, copied, copy }) {
               )}
             </div>
           </div>
-        </motion.div>
-      </motion.div>
-    </>
+        </div>
+      </div>
   )
 }
 

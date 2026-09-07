@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { sections, profile } from '../../data/content.js'
 import { scrollToSection } from '../../utils/scroll.js'
@@ -37,44 +37,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Lock body scroll when mobile menu is open so the page underneath
-  // doesn't scroll while the user is reading the menu. The cleanup
-  // restores the previous scroll position — but we skip the restore
-  // when the menu is closing because the user picked a section to
-  // navigate to (otherwise the restoration would cancel the smooth
-  // scroll mid-flight and the page would jump back to where it was).
-  const navTargetRef = useRef(null)
+  // Lightweight background-scroll prevention while the mobile menu is
+  // open. We deliberately do NOT use the `position: fixed; top: -Ypx`
+  // trick here — that approach zeroes out window.scrollY and breaks
+  // scrollToSection when the user picks a section to navigate to.
+  // `overflow: hidden` on <html> is enough to keep the page from
+  // scrolling under a small dropdown menu, and window.scrollY stays
+  // intact so smooth-scroll-to-section works correctly.
   useEffect(() => {
     if (!menuOpen) return
-    const prevOverflow = document.body.style.overflow
-    const prevPosition = document.body.style.position
-    const prevTop = document.body.style.top
-    const prevWidth = document.body.style.width
-    const scrollY = window.scrollY
-    document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
+    const prev = document.documentElement.style.overflow
+    document.documentElement.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = prevOverflow
-      document.body.style.position = prevPosition
-      document.body.style.top = prevTop
-      document.body.style.width = prevWidth
-      if (!navTargetRef.current) {
-        window.scrollTo(0, scrollY)
-      }
+      document.documentElement.style.overflow = prev
     }
   }, [menuOpen])
 
   function go(id) {
-    navTargetRef.current = id
     setMenuOpen(false)
-    // Defer the scroll until after the menu's body-lock cleanup runs,
-    // otherwise the fixed-body position would offset the target.
-    window.setTimeout(() => {
-      scrollToSection(id)
-      navTargetRef.current = null
-    }, 0)
+    scrollToSection(id)
   }
 
   return (
