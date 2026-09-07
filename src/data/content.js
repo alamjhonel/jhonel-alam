@@ -320,8 +320,8 @@ export const cmdb = {
 export const certCategories = ['All', 'Cybersecurity', 'Cloud', 'Networking', 'Compliance']
 
 export const certifications = [
-  { name: 'Google Cybersecurity Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', id: 'LOJWHMU5PI3X', category: 'Cybersecurity' },
-  { name: 'Google Network Security Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking' },
+  { name: 'Google Cybersecurity Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', id: 'LOJWHMU5PI3X', category: 'Cybersecurity', pdf: 'google-cybersecurity' },
+  { name: 'Google Network Security Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking', pdf: 'google-network-security' },
   { name: 'Google IT Support Professional Certificate', issuer: 'Coursera', date: 'Aug 2026', category: 'Networking' },
   { name: 'AWS Certified SysOps Administrator – Associate', issuer: 'AWS', date: 'Nov 2023', category: 'Cloud' },
   { name: 'Cryptography & Security: Protect Data from Cyber Threats', issuer: 'Certification', date: 'Dec 2025', category: 'Cybersecurity' },

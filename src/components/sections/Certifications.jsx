@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import { certifications, certCategories } from '../../data/content.js'
 import SectionHeading from '../common/SectionHeading.jsx'
 import Reveal from '../common/Reveal.jsx'
+import CertViewer from '../common/CertViewer.jsx'
 import {
   IconShield,
   IconGlobe,
@@ -15,6 +16,8 @@ import {
   IconCopy,
   IconCheck as IconCheckmark,
   IconMail,
+  IconLock,
+  IconEye,
 } from '../common/Icons.jsx'
 
 const CAT_ICONS = {
@@ -120,9 +123,16 @@ function useCopy(copyTimeoutMs = 1500) {
   return [copied, copy]
 }
 
+// Bundled cert assets — read at build time by the Vite plugin and inlined
+// as base64 data URIs inside the JS bundle. The PDFs are NOT emitted as
+// separate fetchable files in /assets, so there is no stable URL a viewer
+// can request. The map is keyed by the `pdf` field on each certification.
+import { CERT_PDF } from '../../data/certAssets.js'
+
 export default function Certifications() {
   const [filter, setFilter] = useState('All')
   const [openCert, setOpenCert] = useState(null)
+  const [viewerCert, setViewerCert] = useState(null)
   const [copied, copy] = useCopy()
 
   const counts = useMemo(() => {
@@ -225,6 +235,18 @@ export default function Certifications() {
             onClose={() => setOpenCert(null)}
             copied={copied}
             copy={copy}
+            onViewPdf={() => setViewerCert(openCert)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {viewerCert && CERT_PDF[viewerCert.pdf] && (
+          <CertViewer
+            key={viewerCert.name}
+            src={CERT_PDF[viewerCert.pdf]}
+            title={viewerCert.name}
+            onClose={() => setViewerCert(null)}
           />
         )}
       </AnimatePresence>
@@ -232,7 +254,7 @@ export default function Certifications() {
   )
 }
 
-function CertModal({ cert, onClose, copied, copy }) {
+function CertModal({ cert, onClose, copied, copy, onViewPdf }) {
   const Icon = CAT_ICONS[cert.category] ?? IconCap
   const skills = CERT_SKILLS[cert.name] ?? []
   const verifyLink = CERT_VERIFY[cert.issuer] ?? '#'
@@ -328,12 +350,21 @@ function CertModal({ cert, onClose, copied, copy }) {
 
             {/* Actions */}
             <div className="flex flex-col items-stretch gap-2.5 border-t border-white/10 pt-4 sm:flex-row sm:flex-wrap sm:items-center">
+              {cert.pdf && CERT_PDF[cert.pdf] && (
+                <button
+                  type="button"
+                  onClick={onViewPdf}
+                  className="btn-primary w-full justify-center sm:w-auto"
+                >
+                  <IconLock size={14} /> View credential
+                </button>
+              )}
               {hasVerify ? (
                 <a
                   href={verifyLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-primary w-full justify-center sm:w-auto"
+                  className="btn-ghost w-full justify-center sm:w-auto"
                 >
                   <IconCheck size={14} /> Verify with {cert.issuer}
                 </a>
@@ -342,7 +373,7 @@ function CertModal({ cert, onClose, copied, copy }) {
                   href={`mailto:jhonel.alam@gmail.com?subject=Verify credential — ${encodeURIComponent(
                     cert.name,
                   )}`}
-                  className="btn-primary w-full justify-center sm:w-auto"
+                  className="btn-ghost w-full justify-center sm:w-auto"
                 >
                   <IconMail size={14} /> Request verification
                 </a>
