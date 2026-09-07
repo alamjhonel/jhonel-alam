@@ -40,6 +40,9 @@ export default function NetworkBackground() {
     let scrollY = window.scrollY
     let density = 1
     let densityTarget = 1
+    // Touch / coarse-pointer devices have no hover — skip parallax to avoid
+    // the "everything shifts when I scroll" glitch on phones/tablets.
+    const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
     const FRAME_INTERVAL = 1000 / 30 // cap ~30fps
     let last = 0
@@ -57,8 +60,15 @@ export default function NetworkBackground() {
     }
 
     function seed() {
+      // Density scales with viewport: sparse on phones, fuller on desktop.
+      // Without this, tablets/mobiles get the same node count and connection
+      // density as desktop, which renders as visual noise over text.
+      const isMobile = width < 640
+      const isTablet = width < 1024
+      const divisor = isMobile ? 65000 : isTablet ? 42000 : 24000
+      const cap = isMobile ? 28 : isTablet ? 48 : 84
       const area = width * height
-      const count = Math.max(28, Math.min(84, Math.round(area / 24000)))
+      const count = Math.max(14, Math.min(cap, Math.round(area / divisor)))
       nodes = new Array(count).fill(0).map(() => ({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -111,12 +121,16 @@ export default function NetworkBackground() {
       mouse.y += (mouse.ty - mouse.y) * 0.06
       density += (densityTarget - density) * 0.04
 
-      const parX = mouse.x * 18
-      const parY = mouse.y * 18 + (window.scrollY - scrollY) * 0.02
+      // Apply parallax only on devices that actually have a cursor.
+      const parX = supportsHover ? mouse.x * 18 : 0
+      const parY = supportsHover ? mouse.y * 18 + (window.scrollY - scrollY) * 0.02 : 0
 
       ctx.clearRect(0, 0, width, height)
       const [r, g, b] = accent
-      const maxDist = 130 * density
+      const isSmall = width < 1024
+      // Shorter connection radius on mobile/tablet so lines don't carpet
+      // the whole screen and make the text behind feel "faded out".
+      const maxDist = (isSmall ? 90 : 130) * density
 
       // Update + draw connections
       for (let i = 0; i < nodes.length; i++) {
@@ -223,7 +237,7 @@ export default function NetworkBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 opacity-60"
+      className="pointer-events-none fixed inset-0 z-0 opacity-40 sm:opacity-60"
     />
   )
 }

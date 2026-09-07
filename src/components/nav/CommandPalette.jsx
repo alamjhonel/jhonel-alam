@@ -115,7 +115,7 @@ export default function CommandPalette({ onOpenTerminal, onToggleTheme }) {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder="Type a command or section…"
-                className="w-full bg-transparent py-4 font-mono text-sm text-ink placeholder:text-ink-ghost focus:outline-none"
+                className="w-full bg-transparent py-4 font-mono text-base text-ink placeholder:text-ink-ghost focus:outline-none sm:text-sm"
                 aria-label="Command input"
               />
               <kbd className="hidden rounded border border-white/15 px-1.5 py-0.5 font-mono text-[10px] text-ink-faint sm:block">

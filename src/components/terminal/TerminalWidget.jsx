@@ -184,7 +184,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-20 right-4 z-[130] w-[calc(100vw-2rem)] max-w-md sm:right-5"
+            className="fixed inset-x-4 bottom-20 z-[130] flex justify-end sm:inset-x-auto sm:right-5"
             initial={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
@@ -192,7 +192,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
             role="dialog"
             aria-label="Mock terminal (simulated)"
           >
-            <div className="panel overflow-hidden shadow-panel">
+            <div className="panel w-full max-w-md overflow-hidden shadow-panel">
               {/* chrome */}
               <div className="flex items-center justify-between border-b border-white/10 bg-base-700/40 px-3.5 py-2.5">
                 <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
               {/* output */}
               <div
                 ref={bodyRef}
-                className="h-[320px] overflow-y-auto bg-base-900/70 p-3 font-mono text-xs leading-relaxed"
+                className="h-[320px] overflow-y-auto bg-base-900/70 p-3 font-mono text-[13px] leading-relaxed sm:text-xs"
                 onClick={() => inputRef.current?.focus()}
               >
                 {lines.map((l, i) => (
@@ -250,7 +250,7 @@ export default function TerminalWidget({ open, onOpenChange }) {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onInputKey}
                   placeholder="whoami"
-                  className="w-full bg-transparent py-2.5 font-mono text-xs text-ink placeholder:text-ink-ghost focus:outline-none"
+                  className="w-full bg-transparent py-2.5 font-mono text-base text-ink placeholder:text-ink-ghost focus:outline-none sm:text-xs"
                   aria-label="Terminal command input (simulated)"
                   spellCheck="false"
                   autoComplete="off"

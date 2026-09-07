@@ -168,21 +168,21 @@ export default function Experience() {
                       type="button"
                       onClick={() => setOpenId(isOpen ? null : job.id)}
                       aria-expanded={isOpen}
-                      className="flex w-full items-start justify-between gap-4 p-5 text-left"
+                      className="flex w-full items-start justify-between gap-3 p-4 text-left sm:gap-4 sm:p-5"
                     >
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                          <h3 className="text-lg font-semibold text-ink">{job.role}</h3>
-                          <span className="rounded border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-accent">
+                          <h3 className="min-w-0 text-base font-semibold text-ink sm:text-lg">{job.role}</h3>
+                          <span className="shrink-0 rounded border border-accent/25 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-accent">
                             {job.tag}
                           </span>
                         </div>
-                        <p className="mt-1 font-mono text-sm text-accent">{job.org}</p>
+                        <p className="mt-1 truncate font-mono text-sm text-accent">{job.org}</p>
                         <p className="mt-1 font-mono text-xs text-ink-faint">
                           {job.period} · {job.location}
                         </p>
                         {!isOpen && (
-                          <p className="mt-2 text-sm text-ink-soft">{job.summary}</p>
+                          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{job.summary}</p>
                         )}
                       </div>
                       <motion.span
@@ -226,14 +226,14 @@ export default function Experience() {
         {/* Security toolstack — hands-on tools tied to the work above */}
         <div className="mt-12 sm:mt-16">
           <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:mb-6 sm:flex-row sm:items-center">
-            <div className="flex w-full items-center gap-3 sm:w-auto">
+            <div className="flex w-full min-w-0 items-center gap-3 sm:w-auto">
               <IconCpu size={18} className="shrink-0 text-accent" />
-              <h3 className="flex-1 shrink-0 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft sm:tracking-[0.25em] sm:text-xs">
+              <h3 className="min-w-0 flex-1 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft sm:tracking-[0.25em] sm:text-xs">
                 Security tools I operate
               </h3>
-              <span className="h-px flex-1 bg-white/[0.08] sm:w-24" />
+              <span className="hidden h-px w-24 shrink-0 bg-white/[0.08] sm:block" />
             </div>
-            <div className="-mx-2 flex flex-nowrap gap-1.5 overflow-x-auto px-2 pb-1 sm:mx-0 sm:flex sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+            <div className="-mx-2 flex w-full flex-nowrap gap-1.5 overflow-x-auto px-2 pb-1 sm:mx-0 sm:w-auto sm:flex sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
               {toolCategories.map((cat) => {
                 const on = toolFilter === cat
                 return (

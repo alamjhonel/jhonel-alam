@@ -107,10 +107,10 @@ export default function Hero() {
 
               <dl className="space-y-2.5 font-mono text-xs">
                 {STATUS.map(([k, v]) => (
-                  <div key={k} className="flex items-center gap-3">
-                    <dt className="text-ink-faint">{k}</dt>
-                    <span className="h-px flex-1 bg-white/[0.08]" />
-                    <dd className="text-accent">{v}</dd>
+                  <div key={k} className="flex min-w-0 items-center gap-3">
+                    <dt className="shrink-0 whitespace-nowrap text-ink-faint">{k}</dt>
+                    <span className="h-px min-w-0 flex-1 bg-white/[0.08]" />
+                    <dd className="shrink-0 text-accent">{v}</dd>
                   </div>
                 ))}
               </dl>

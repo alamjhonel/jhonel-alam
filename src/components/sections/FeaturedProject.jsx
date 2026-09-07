@@ -268,21 +268,21 @@ function AssetsTab() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="filter hosts…"
-            className="w-36 bg-transparent py-1.5 font-mono text-xs text-ink placeholder:text-ink-ghost focus:outline-none"
+            className="w-32 bg-transparent py-1.5 font-mono text-base text-ink placeholder:text-ink-ghost focus:outline-none sm:w-36 sm:text-xs"
             aria-label="Filter assets"
           />
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse font-mono text-xs">
+        <table className="w-full min-w-[480px] border-collapse font-mono text-xs">
           <thead>
             <tr className="border-b border-white/10 text-left text-ink-ghost">
-              <th className="py-2 pr-3 font-medium">host</th>
-              <th className="py-2 pr-3 font-medium">ip</th>
-              <th className="py-2 pr-3 font-medium">type</th>
-              <th className="py-2 pr-3 font-medium">vendor</th>
-              <th className="py-2 pr-3 font-medium">status</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">host</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">ip</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">type</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">vendor</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">status</th>
             </tr>
           </thead>
           <tbody>
@@ -296,11 +296,11 @@ function AssetsTab() {
                   transition={{ delay: i * 0.03 }}
                   className="border-b border-white/5 text-ink-soft hover:bg-white/[0.03]"
                 >
-                  <td className="py-2 pr-3 text-ink">{a.host}</td>
-                  <td className="py-2 pr-3">{a.ip}</td>
-                  <td className="py-2 pr-3">{a.type}</td>
-                  <td className="py-2 pr-3">{a.vendor}</td>
-                  <td className="py-2 pr-3">
+                  <td className="whitespace-nowrap py-2 pr-3 text-ink">{a.host}</td>
+                  <td className="whitespace-nowrap py-2 pr-3">{a.ip}</td>
+                  <td className="whitespace-nowrap py-2 pr-3">{a.type}</td>
+                  <td className="whitespace-nowrap py-2 pr-3">{a.vendor}</td>
+                  <td className="whitespace-nowrap py-2 pr-3">
                     <span className="inline-flex items-center gap-1.5">
                       <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
                       <span className={s.text}>{s.label}</span>
@@ -438,7 +438,7 @@ function SshTab() {
       </div>
       <div
         ref={bodyRef}
-        className="h-[260px] overflow-y-auto rounded-lg border border-white/10 bg-base-900/70 p-3 font-mono text-xs leading-relaxed"
+        className="h-[260px] overflow-y-auto rounded-lg border border-white/10 bg-base-900/70 p-3 font-mono text-[13px] leading-relaxed sm:text-xs"
       >
         {lines.map((l, i) => (
           <div
@@ -470,7 +470,7 @@ function SshTab() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="show interfaces"
-          className="w-full bg-transparent py-2.5 font-mono text-xs text-ink placeholder:text-ink-ghost focus:outline-none"
+          className="w-full bg-transparent py-2.5 font-mono text-base text-ink placeholder:text-ink-ghost focus:outline-none sm:text-xs"
           aria-label="SSH command input"
           spellCheck="false"
           autoComplete="off"
@@ -668,14 +668,14 @@ function CmdbAuditTab() {
         </span>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse font-mono text-xs">
+        <table className="w-full min-w-[520px] border-collapse font-mono text-xs">
           <thead>
             <tr className="border-b border-white/10 text-left text-ink-ghost">
-              <th className="py-2 pr-3 font-medium">time</th>
-              <th className="py-2 pr-3 font-medium">actor</th>
-              <th className="py-2 pr-3 font-medium">action</th>
-              <th className="py-2 pr-3 font-medium">ci</th>
-              <th className="py-2 pr-3 font-medium">detail</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">time</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">actor</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">action</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">ci</th>
+              <th className="whitespace-nowrap py-2 pr-3 font-medium">detail</th>
             </tr>
           </thead>
           <tbody>
@@ -688,10 +688,10 @@ function CmdbAuditTab() {
                 className="border-b border-white/5 text-ink-soft hover:bg-white/[0.03]"
               >
                 <td className="whitespace-nowrap py-2 pr-3 text-ink-faint">{a.ts}</td>
-                <td className="py-2 pr-3">{a.actor}</td>
-                <td className={`py-2 pr-3 uppercase ${AUDIT_STYLES[a.action]}`}>{a.action}</td>
-                <td className="py-2 pr-3 text-ink">{a.ci}</td>
-                <td className="py-2 pr-3 text-ink-faint">{a.detail}</td>
+                <td className="whitespace-nowrap py-2 pr-3">{a.actor}</td>
+                <td className={`whitespace-nowrap py-2 pr-3 uppercase ${AUDIT_STYLES[a.action]}`}>{a.action}</td>
+                <td className="whitespace-nowrap py-2 pr-3 text-ink">{a.ci}</td>
+                <td className="whitespace-nowrap py-2 pr-3 text-ink-faint">{a.detail}</td>
               </motion.tr>
             ))}
           </tbody>

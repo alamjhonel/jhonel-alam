@@ -264,7 +264,7 @@ export default function Contact() {
 }
 
 function inputCls(hasError) {
-  return `w-full rounded-md border bg-base-900/50 px-3 py-2.5 font-mono text-sm text-ink placeholder:text-ink-ghost transition-colors focus:outline-none ${
+  return `w-full rounded-md border bg-base-900/50 px-3 py-2.5 font-mono text-base text-ink placeholder:text-ink-ghost transition-colors focus:outline-none sm:text-sm ${
     hasError
       ? 'border-rose-400/60 focus:border-rose-400'
       : 'border-white/10 focus:border-accent/50'
