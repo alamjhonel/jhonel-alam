@@ -136,6 +136,24 @@ function isInlinedPdf(value) {
   return typeof value === 'string' && value.startsWith('data:application/pdf')
 }
 
+function reportCertDebug(payload) {
+  // #region debug-point A:cert-button-gate
+  fetch('http://127.0.0.1:7777/event', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      sessionId: 'cert-view-button',
+      runId: 'pre-fix',
+      hypothesisId: payload.hypothesisId ?? 'A',
+      location: 'src/components/sections/Certifications.jsx',
+      msg: '[DEBUG] certification pdf gate',
+      data: payload,
+      ts: Date.now(),
+    }),
+  }).catch(() => {})
+  // #endregion
+}
+
 export default function Certifications() {
   const [filter, setFilter] = useState('All')
   const [openCert, setOpenCert] = useState(null)
@@ -266,6 +284,24 @@ function CertModal({ cert, onClose, copied, copy, onViewPdf }) {
   const skills = CERT_SKILLS[cert.name] ?? []
   const verifyLink = CERT_VERIFY[cert.issuer] ?? '#'
   const hasVerify = verifyLink !== '#'
+  const pdfValue = cert.pdf ? CERT_PDF[cert.pdf] : undefined
+  const hasInlinePdf = cert.pdf && isInlinedPdf(pdfValue)
+
+  useEffect(() => {
+    reportCertDebug({
+      hypothesisId: 'A',
+      certName: cert.name,
+      issuer: cert.issuer,
+      category: cert.category,
+      pdfKey: cert.pdf ?? null,
+      hasPdfKey: Boolean(cert.pdf),
+      assetType: typeof pdfValue,
+      assetPrefix:
+        typeof pdfValue === 'string' ? pdfValue.slice(0, 32) : String(pdfValue),
+      hasInlinePdf: Boolean(hasInlinePdf),
+      hasVerify,
+    })
+  }, [cert.name, cert.issuer, cert.category, cert.pdf, pdfValue, hasInlinePdf, hasVerify])
 
   return (
     <div
@@ -357,7 +393,7 @@ function CertModal({ cert, onClose, copied, copy, onViewPdf }) {
 
             {/* Actions */}
             <div className="flex flex-col items-stretch gap-2.5 border-t border-white/10 pt-4 sm:flex-row sm:flex-wrap sm:items-center">
-              {cert.pdf && isInlinedPdf(CERT_PDF[cert.pdf]) && (
+              {hasInlinePdf && (
                 <button
                   type="button"
                   onClick={onViewPdf}
