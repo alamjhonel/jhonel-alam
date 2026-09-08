@@ -191,3 +191,13 @@ export const IconRadar = (p) => (
     <path d="M12 12 19 7" />
   </S>
 )
+export const IconChevronDown = (p) => (
+  <S {...p}>
+    <path d="m6 9 6 6 6-6" />
+  </S>
+)
+export const IconChevronUp = (p) => (
+  <S {...p}>
+    <path d="m6 15 6-6 6 6" />
+  </S>
+)
