@@ -332,7 +332,7 @@ export const certifications = [
   { name: 'Master Course in Google Cloud Digital Leader', issuer: 'UDEMY', category: 'Cloud', pdf: 'google-cloud-digital-leader' },
   { name: 'Critical Infrastructure Protection', issuer: 'OPSWAT', category: 'Compliance' },
   { name: 'Data Protection & Security', issuer: 'UDEMY', category: 'Compliance', pdf: 'data-protection-gdpr' },
-  { name: 'National Certificate II – Computer System Servicing', issuer: 'TESDA', category: 'Networking' },
+  { name: 'National Certificate II – Computer System Servicing', issuer: 'TESDA', category: 'Networking', pdf: 'tesda-nc2' },
 ]
 
 // --- Technical Activities -------------------------------------------------

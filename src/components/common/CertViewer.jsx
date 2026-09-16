@@ -41,55 +41,53 @@ export default function CertViewer({ src, title, onClose }) {
   const pageRefs = useRef([])
   const [pdf, setPdf] = useState(null)
   const [loadError, setLoadError] = useState(null)
-  const [containerW, setContainerW] = useState(0)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
 
   const pageCount = pdf?.numPages ?? 0
 
   // ---------- Decode + load PDF once per src ----------
   useEffect(() => {
     let cancelled = false
-    let doc = null
+    const loadingTask = pdfjsLib.getDocument({
+      data: decodeDataUri(src),
+      isEvalSupported: false,
+      password: '',
+    })
+    setPdf(null)
+    setLoadError(null)
     ;(async () => {
       try {
-        const data = decodeDataUri(src)
-        doc = await pdfjsLib.getDocument({
-          data,
-          // Standard-encoded cert PDFs don't need custom cmaps. If a cert
-          // ever ships with a non-standard encoding, this will throw and
-          // the user sees a friendly fallback that directs them to the
-          // issuer for verification.
-          isEvalSupported: false,
-          password: '',
-        }).promise
-        if (!cancelled) {
-          setLoadError(null)
-          setPdf(doc)
-        }
+        const doc = await loadingTask.promise
+        if (!cancelled) setPdf(doc)
       } catch (err) {
+        if (cancelled) return
         console.error('Cert viewer load failed', err)
-        if (!cancelled) setLoadError(String(err?.message || err))
+        setLoadError(String(err?.message || err))
       }
     })()
     return () => {
       cancelled = true
-      doc?.destroy?.().catch(() => {})
+      loadingTask.destroy().catch(() => {})
     }
   }, [src])
 
-  // ---------- Track container width for responsive fitting ----------
+  // ---------- Measure the space between the modal header and footer ----------
   useEffect(() => {
-    const el = wrapperRef.current
-    if (!el) return
-    const target = el.querySelector('[data-pdf-scroll]')
+    const target = wrapperRef.current?.querySelector('[data-pdf-scroll]')
     if (!target) return
     function measure() {
-      const inner = Math.max(
-        320,
-        target.clientWidth -
-          Number.parseInt(getComputedStyle(target).paddingLeft || '0', 10) -
-          Number.parseInt(getComputedStyle(target).paddingRight || '0', 10),
+      const style = getComputedStyle(target)
+      const width = Math.max(
+        0,
+        target.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
       )
-      setContainerW(inner)
+      const height = Math.max(
+        0,
+        target.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
+      )
+      setContainerSize((prev) =>
+        prev.width === width && prev.height === height ? prev : { width, height },
+      )
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -99,42 +97,46 @@ export default function CertViewer({ src, title, onClose }) {
       ro.disconnect()
       window.removeEventListener('orientationchange', measure)
     }
-  }, [pdf])
+  }, [])
 
-  // ---------- Render each page to its canvas when width or PDF changes ----------
+  // ---------- Fit each complete page without changing the modal dimensions ----------
   useEffect(() => {
-    if (!pdf || containerW <= 0) return
+    const { width, height } = containerSize
+    if (!pdf || width <= 0 || height <= 0) return
     let cancelled = false
+    let renderTask = null
     const renderAll = async () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const canvases = pageRefs.current
       for (let i = 1; i <= pdf.numPages; i++) {
         if (cancelled) return
         try {
           const page = await pdf.getPage(i)
+          if (cancelled) return
           const viewport = page.getViewport({ scale: 1 })
-          // Fit width. For portrait certs this gives a tall page that scrolls
-          // naturally; for landscape certs the page is still readable because
-          // we never zoom wider than the container.
-          const scale = containerW / viewport.width
+          const scale = Math.min(width / viewport.width, height / viewport.height)
           const vp = page.getViewport({ scale })
-          const canvas = canvases[i - 1]
+          const canvas = pageRefs.current[i - 1]
           if (!canvas) continue
           canvas.width = Math.ceil(vp.width * dpr)
           canvas.height = Math.ceil(vp.height * dpr)
           canvas.style.width = vp.width + 'px'
           canvas.style.height = vp.height + 'px'
-          const ctx = canvas.getContext('2d')
+          // willReadFrequently forces CPU-side raster: some Intel GPU drivers
+          // mirror the content of GPU-accelerated canvases during readback,
+          // which renders cert text upside down.
+          const ctx = canvas.getContext('2d', { willReadFrequently: true })
           if (!ctx) continue
-          // Neutralize any DPI tint so backgrounds are pure white and the
-          // viewer chrome contrasts properly.
-          await page.render({
+          renderTask = page.render({
+            canvas,
             canvasContext: ctx,
             viewport: vp,
             transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null,
             background: '#ffffff',
-          }).promise
+          })
+          await renderTask.promise
+          renderTask = null
         } catch (err) {
+          if (cancelled || err?.name === 'RenderingCancelledException') return
           console.error('Failed to render cert page', i, err)
         }
       }
@@ -142,8 +144,10 @@ export default function CertViewer({ src, title, onClose }) {
     renderAll()
     return () => {
       cancelled = true
+      // Stop drawing before another effect resizes or reuses the same canvas.
+      renderTask?.cancel()
     }
-  }, [pdf, containerW])
+  }, [pdf, containerSize])
 
   // ---------- Security: keyboard shortcuts (save/print/source) ----------
   useEffect(() => {
@@ -195,7 +199,7 @@ export default function CertViewer({ src, title, onClose }) {
     >
       <div
         ref={wrapperRef}
-        className="relative flex max-h-[95vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-accent/30 bg-base-900 shadow-2xl"
+        className="relative flex h-[95vh] max-h-[95vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-accent/30 bg-base-900 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
         onContextMenu={STOP}
         onDragStart={STOP}
@@ -255,7 +259,7 @@ export default function CertViewer({ src, title, onClose }) {
         {/* PDF canvas stack */}
         <div
           data-pdf-scroll
-          className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden bg-black px-3 py-4 sm:px-5"
+          className="relative z-10 min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-black px-3 py-4 sm:px-5"
         >
           {loadError ? (
             <div className="flex min-h-[50vh] flex-col items-center justify-center gap-2 px-4 text-center">
@@ -277,14 +281,14 @@ export default function CertViewer({ src, title, onClose }) {
               </div>
             </div>
           ) : (
-            <div className="mx-auto flex flex-col items-center gap-4">
+            <div className="mx-auto flex min-h-full flex-col items-center justify-center gap-4">
               {pages.map((p) => (
                 <canvas
                   key={p}
                   ref={(el) => {
                     pageRefs.current[p - 1] = el
                   }}
-                  className={`block max-w-full rounded-md shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] ring-1 ring-white/10 ${
+                  className={`block max-w-full shrink-0 rounded-md shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] ring-1 ring-white/10 ${
                     pages.length > 1 ? 'sm:rounded-lg' : ''
                   }`}
                   style={{ background: '#ffffff' }}
