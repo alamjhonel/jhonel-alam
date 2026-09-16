@@ -47,7 +47,11 @@ Thumbs.db
 .yarn/
 .pnpm-store/
 
-# Cert PDF originals — these get inlined as base64 data URIs at build
-# time and bundled into the JS. Keeping the source PDFs out of git
-# avoids leaking credentials in the public repo history.
-src/assets/certs/*.pdf
+# Cert PDFs are inlined as base64 data URIs into the JS bundle at build
+# time (see vite-plugins/cert-assets.js), so they must be tracked for
+# Vercel builds to include them.
+
+# Debug / local tooling artifacts
+.dbg/
+.vercel/
+debug-*.md
